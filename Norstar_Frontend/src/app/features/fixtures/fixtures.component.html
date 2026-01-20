@@ -1,0 +1,95 @@
+<div class=<div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Fixtures</h1>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex items-center justify-center p-8">
+        <div class="text-lg">Loading fixtures...</div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+        <h3 class="text-red-800 font-semibold">Error</h3>
+        <p class="text-red-600">{{ error }}</p>
+    </div>
+
+    <!-- Main Content -->
+    <ng-container *ngIf="!loading">
+        <!-- Create Fixture Form -->
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Add New Fixture</h2>
+
+            <form [formGroup]="fixtureForm" (ngSubmit)="onSubmit()" class="space-y-4">
+                <!-- Opponent Field -->
+                <div>
+                    <label for="opponent" class="block text-sm font-medium mb-1">
+                        Opponent
+                    </label>
+                    <input id="opponent" type="text" formControlName="opponent"
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        [class.border-red-500]="opponent?.invalid && opponent?.touched" />
+                    <div *ngIf="opponent?.invalid && opponent?.touched" class="text-red-600 text-sm mt-1">
+                        <span *ngIf="opponent?.errors?.['required']">Opponent is required</span>
+                        <span *ngIf="opponent?.errors?.['minlength']">Opponent must be at least 2 characters</span>
+                    </div>
+                </div>
+
+                <!-- Date Field -->
+                <div>
+                    <label for="date" class="block text-sm font-medium mb-1">
+                        Date
+                    </label>
+                    <input id="date" type="date" formControlName="date"
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        [class.border-red-500]="date?.invalid && date?.touched" />
+                    <div *ngIf="date?.invalid && date?.touched" class="text-red-600 text-sm mt-1">
+                        <span *ngIf="date?.errors?.['required']">Date is required</span>
+                    </div>
+                </div>
+
+                <!-- Location Field -->
+                <div>
+                    <label for="location" class="block text-sm font-medium mb-1">
+                        Location
+                    </label>
+                    <input id="location" type="text" formControlName="location"
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        [class.border-red-500]="location?.invalid && location?.touched" />
+                    <div *ngIf="location?.invalid && location?.touched" class="text-red-600 text-sm mt-1">
+                        <span *ngIf="location?.errors?.['required']">Location is required</span>
+                        <span *ngIf="location?.errors?.['minlength']">Location must be at least 2 characters</span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" [disabled]="isSubmitting"
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition">
+                    {{ isSubmitting ? 'Creating...' : 'Create Fixture' }}
+                </button>
+            </form>
+        </div>
+
+        <!-- Fixtures List -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <h2 class="text-xl font-semibold p-6 border-b">All Fixtures</h2>
+
+            <p *ngIf="fixtures.length === 0" class="p-6 text-gray-500">
+                No fixtures found
+            </p>
+
+            <ul *ngIf="fixtures.length > 0" class="divide-y">
+                <li *ngFor="let fixture of fixtures" class="p-6 hover:bg-gray-50">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-semibold text-lg">{{ fixture.opponent }}</h3>
+                            <p class="text-gray-600 mt-1">{{ formatDate(fixture.date) }}</p>
+                            <p class="text-gray-500 text-sm mt-1">📍 {{ fixture.location }}</p>
+                        </div>
+                        <button (click)="deleteFixture(fixture.id)" class="text-red-600 hover:text-red-800 font-medium">
+                            Delete
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </ng-container>
+</div>
