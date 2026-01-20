@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { FixturesService } from '../../core/services/fixtures.service';
@@ -6,8 +6,9 @@ import { Fixture } from '../../core/models/fixture.model';
 
 @Component({
   selector: 'app-fixtures',
+  standalone: false,
   templateUrl: './fixtures.component.html',
-  styleUrls: ['./fixtures.component.css']
+  styleUrls: []
 })
 export class FixturesComponent implements OnInit, OnDestroy {
   fixtures: Fixture[] = [];
@@ -20,7 +21,8 @@ export class FixturesComponent implements OnInit, OnDestroy {
 
   constructor(
     private fixturesService: FixturesService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) {
     this.fixtureForm = this.fb.group({
       opponent: ['', Validators.required],
@@ -34,16 +36,21 @@ export class FixturesComponent implements OnInit, OnDestroy {
   }
 
   loadFixtures(): void {
+    console.log('Loading fixtures...');
     this.fixturesService.getFixtures()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (fixtures: Fixture[]) => {
+          console.log('Fixtures received:', fixtures);
           this.fixtures = fixtures;
           this.loading = false;
+          this.cdr.detectChanges(); // Force change detection
         },
         error: (err: Error) => {
+          console.error('Error loading fixtures:', err);
           this.error = 'Failed to load fixtures, ensure the backend is running.';
           this.loading = false;
+          this.cdr.detectChanges(); // Force change detection
         }
       });
   }

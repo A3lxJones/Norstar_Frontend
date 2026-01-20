@@ -1,0 +1,45 @@
+<header class="site-header" role="banner">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div class="header-container">
+        <!-- Logo/Brand -->
+        <div class="brand">
+            <a routerLink="/" class="brand-link" aria-label="Go to homepage">
+                <div class="logo-placeholder" role="img" aria-label="Team logo placeholder">
+                    <img src="Norstarlogo.jpg" alt="Logo" />
+                </div>
+                <span class="brand-name">
+                    Ballymena Norstar
+                </span>
+            </a>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen"
+            aria-controls="main-navigation" aria-label="Toggle navigation menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+
+        <!-- Navigation -->
+        <nav id="main-navigation" class="main-nav" [class.is-open]="isMenuOpen" role="navigation"
+            aria-label="Main navigation">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                        class="nav-link" (click)="closeMenu()">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="/fixtures" routerLinkActive="active" class="nav-link" (click)="closeMenu()">
+                        Fixtures
+                    </a>
+                </li>
+                <!-- Add more navigation items as needed -->
+
+            </ul>
+        </nav>
+    </div>
+</header>
