@@ -56,7 +56,7 @@ export class ApiService {
     private handleError(error: HttpErrorResponse) {
         let errorMessage = 'An error occurred';
 
-        if (error.error instanceof ErrorEvent) {
+        if (typeof ErrorEvent !== 'undefined' && error.error instanceof ErrorEvent) {
             // Client-side error
             errorMessage = `Error: ${error.error.message}`;
         } else {
